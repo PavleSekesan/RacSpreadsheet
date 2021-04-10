@@ -1,0 +1,10 @@
+C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.csprojAssemblyReference.cache
+C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.Form1.resources
+C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.Properties.Resources.resources
+C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.csproj.GenerateResource.cache
+C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.csproj.CoreCompileInputs.cache
+C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\bin\Debug\SpreadSheetCalculator.exe.config
+C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\bin\Debug\SpreadSheetCalculator.exe
+C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\bin\Debug\SpreadSheetCalculator.pdb
+C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.exe
+C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.pdb
