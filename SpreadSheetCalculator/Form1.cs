@@ -33,17 +33,7 @@ namespace SpreadSheetCalculator
         {
             for (int i = 0; i < mainDataGrid.ColumnCount; i++)
             {
-                // Convert header index to alphabet string
-                int temp = i + 1;
-                string headerText = "";
-                while (temp > 0)
-                {
-                    int currentLetterCode = (temp - 1) % 26;
-                    headerText = Convert.ToChar(currentLetterCode + 65) + headerText;
-                    temp = (temp - currentLetterCode - 1) / 26;
-                }
-
-                mainDataGrid.Columns[i].HeaderText = headerText;
+                mainDataGrid.Columns[i].HeaderText = CellIndexConverter.NumberToLetter(i);
             }
         }
         private void GridSetup()
@@ -58,6 +48,15 @@ namespace SpreadSheetCalculator
             SetRowIndicies();
 
             mainDataGrid.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                //MessageBox.Show(FunctionParser.Parse(textBox1.Text).ToString());
+                mainDataGrid.SelectedCells[0].Value = FunctionParser.Parse(textBox1.Text, mainDataGrid);
+            }
         }
     }
 }
