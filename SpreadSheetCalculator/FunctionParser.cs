@@ -11,29 +11,26 @@ namespace SpreadSheetCalculator
     static class FunctionParser
     {
         private static DataGridView dataGrid;
+        private static string[] functions = new string[] { "SUM", "AVG" };
         private static object GetCellValue(int row, int col)
         {
             return dataGrid.Rows[row].Cells[col].Value;
         }
-        private static double[] ConvertArgsToDouble(string[] args)
+
+        private static double ExecuteFunction(string function, string[] args)
         {
-            double[] values = new double[args.Length];
-            for (int i = 0; i < args.Length; i++)
+            if (function == "SUM")
             {
-                string arg = args[i];
-                bool hasLetters = !Regex.IsMatch(arg, @"^[a-zA-Z]+$");
-                if (!hasLetters)
-                    values[i] = Convert.ToDouble(arg);
-                else
-                {
-                    string letter = Regex.Match(arg, @"^[^0-9]*").Value;
-                    int col = CellIndexConverter.LetterToNumber(letter) - 1;
-                    int row = Convert.ToInt32(Regex.Match(arg, @"\d+").Value) - 1;
-                    values[i] = Convert.ToDouble(GetCellValue(row, col));
-                }
+                return ExecuteSum(args);
             }
-            return values;
+            else if (function == "AVG")
+            {
+                return ExecuteAverage(args);
+            }
+            else
+                return Double.NaN;
         }
+
         private static double ExecuteSum(string[] args)
         {
             double[] values = ConvertArgsToDouble(args);
@@ -48,6 +45,48 @@ namespace SpreadSheetCalculator
             double sum = ExecuteSum(args);
             return sum / args.Length;
         }
+
+        private static bool ArgIsFunction(string arg)
+        {
+            foreach (var function in functions)
+            {
+                if (arg.Contains(function))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static bool ArgIsCell(string arg)
+        {
+            // Check if arg contains letters
+            return Regex.IsMatch(arg, @"^[a-zA-Z]");
+        }
+        private static double[] ConvertArgsToDouble(string[] args)
+        {
+            double[] values = new double[args.Length];
+            for (int i = 0; i < args.Length; i++)
+            {
+                string arg = args[i];
+               
+                if (ArgIsFunction(arg))
+                    arg = Parse(arg, dataGrid).ToString();
+
+                if (ArgIsCell(arg))
+                {
+                    string letter = Regex.Match(arg, @"^[^0-9]*").Value;
+                    int col = CellIndexConverter.LetterToNumber(letter) - 1;
+                    int row = Convert.ToInt32(Regex.Match(arg, @"\d+").Value) - 1;
+                    values[i] = Convert.ToDouble(GetCellValue(row, col));
+                }
+                else
+                    values[i] = Convert.ToDouble(arg);
+                
+            }
+            return values;
+        }
+        
         public static double Parse(string text, DataGridView mainDataGrid)
         {
             dataGrid = mainDataGrid;
@@ -56,19 +95,30 @@ namespace SpreadSheetCalculator
                 string function = text.Split('(')[0];
                 int openParenthesesIndex = text.IndexOf('(') + 1;
                 int closedParenthesesIndex = text.LastIndexOf(')');
-                string[] args = text.Substring(openParenthesesIndex, closedParenthesesIndex - openParenthesesIndex).Split(',');
 
+                // Split into args
+                bool insideAnotherFunction = false;
+                List<string> argsList = new List<string>();
+                string currentArg = "";
+                foreach (char c in text.Substring(openParenthesesIndex, closedParenthesesIndex - openParenthesesIndex))
+                {
+                    if (c == ',' && !insideAnotherFunction)
+                    {
+                        argsList.Add(currentArg);
+                        currentArg = "";
+                    }
+                    else
+                       currentArg += c.ToString(); 
 
-                if (function == "SUM")
-                {
-                    return ExecuteSum(args);
+                    if (c == '(')
+                        insideAnotherFunction = true;
+                    if (c == ')')
+                        insideAnotherFunction = false;
                 }
-                else if (function == "AVG")
-                {
-                    return ExecuteAverage(args);
-                }
-                else
-                    return Double.NaN;
+                argsList.Add(currentArg);
+                string[] args = argsList.ToArray();
+
+                return ExecuteFunction(function, args);
             }
             catch
             {
