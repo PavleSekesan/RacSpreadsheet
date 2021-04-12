@@ -8,3 +8,12 @@ C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\bin\Debug\Sprea
 C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\bin\Debug\SpreadSheetCalculator.pdb
 C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.exe
 C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.pdb
+C:\Users\Irfan\Documents\GitHub\RacSpreadsheet\SpreadSheetCalculator\bin\Debug\SpreadSheetCalculator.exe.config
+C:\Users\Irfan\Documents\GitHub\RacSpreadsheet\SpreadSheetCalculator\bin\Debug\SpreadSheetCalculator.exe
+C:\Users\Irfan\Documents\GitHub\RacSpreadsheet\SpreadSheetCalculator\bin\Debug\SpreadSheetCalculator.pdb
+C:\Users\Irfan\Documents\GitHub\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.csprojAssemblyReference.cache
+C:\Users\Irfan\Documents\GitHub\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.Form1.resources
+C:\Users\Irfan\Documents\GitHub\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.Properties.Resources.resources
+C:\Users\Irfan\Documents\GitHub\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.csproj.GenerateResource.cache
+C:\Users\Irfan\Documents\GitHub\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.exe
+C:\Users\Irfan\Documents\GitHub\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.pdb

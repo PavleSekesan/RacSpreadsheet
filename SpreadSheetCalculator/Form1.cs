@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.OleDb;
 
 namespace SpreadSheetCalculator
 {
@@ -20,6 +21,9 @@ namespace SpreadSheetCalculator
         private void Form1_Load(object sender, EventArgs e)
         {
             GridSetup();
+            tabPage1.Text = "Import";
+            tabPage2.Text = "Export";
+            tx_sheet.Text = "Sheet1";
         }
 
         private void SetRowIndicies()
@@ -43,7 +47,7 @@ namespace SpreadSheetCalculator
 
             mainDataGrid.ColumnCount = COLUMN_NUMBER;
             mainDataGrid.RowCount = ROW_NUMBER;
-            
+
             SetColumnHeaders();
             SetRowIndicies();
 
@@ -57,6 +61,43 @@ namespace SpreadSheetCalculator
                 //MessageBox.Show(FunctionParser.Parse(textBox1.Text).ToString());
                 mainDataGrid.SelectedCells[0].Value = FunctionParser.Parse(textBox1.Text, mainDataGrid);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                InitialDirectory = @"Documents",
+                Title = "Browse Excel Files",
+
+                CheckFileExists = true,
+                CheckPathExists = true,
+
+                DefaultExt = "xlsx",
+                Filter = "xlsx files (*.xlsx)|*.xlsx",
+                FilterIndex = 2,
+                RestoreDirectory = true,
+
+                ReadOnlyChecked = true,
+                ShowReadOnly = true
+            };
+
+            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                this.tx_path.Text = openFileDialog1.FileName;
+            }
+        }
+
+        private void bt_load_Click(object sender, EventArgs e)
+        {
+            string PathConn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + tx_path.Text + ";Extended Properties = \"Excel 12.0 Xml;HDR=YES\"; ";
+            OleDbConnection conn = new OleDbConnection(PathConn);
+            OleDbDataAdapter myDataAdapter = new OleDbDataAdapter("Select * from [" + tx_sheet.Text + "$]", conn);
+            DataTable dt = new DataTable();
+            myDataAdapter.Fill(dt);
+            mainDataGrid.Columns.Clear();
+            mainDataGrid.DataSource = dt;
+
         }
     }
 }
