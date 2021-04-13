@@ -38,9 +38,11 @@ namespace SpreadSheetCalculator
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.bt_export = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.mainDataGrid)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainDataGrid
@@ -119,13 +121,24 @@ namespace SpreadSheetCalculator
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.bt_export);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(192, 74);
+            this.tabPage2.Size = new System.Drawing.Size(793, 70);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // bt_export
+            // 
+            this.bt_export.Location = new System.Drawing.Point(7, 7);
+            this.bt_export.Name = "bt_export";
+            this.bt_export.Size = new System.Drawing.Size(75, 23);
+            this.bt_export.TabIndex = 0;
+            this.bt_export.Text = "Export";
+            this.bt_export.UseVisualStyleBackColor = true;
+            this.bt_export.Click += new System.EventHandler(this.bt_export_Click);
             // 
             // Form1
             // 
@@ -142,6 +155,7 @@ namespace SpreadSheetCalculator
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -158,6 +172,7 @@ namespace SpreadSheetCalculator
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Button bt_export;
     }
 }
 
