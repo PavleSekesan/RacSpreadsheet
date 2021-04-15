@@ -48,7 +48,11 @@ namespace SpreadSheetCalculator
             const int COLUMN_NUMBER = 26;
             const int ROW_NUMBER = 128;
 
-            mainDataGrid.ColumnCount = COLUMN_NUMBER;
+            for (int i = 0; i < COLUMN_NUMBER; i++)
+            {
+                mainDataGrid.Columns.Add(new DataGridViewColumn(new SpreadsheetCell()));
+            }
+
             mainDataGrid.RowCount = ROW_NUMBER;
 
             SetColumnHeaders();
@@ -56,13 +60,12 @@ namespace SpreadSheetCalculator
 
             mainDataGrid.AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders);
         }
-
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 //MessageBox.Show(FunctionParser.Parse(textBox1.Text).ToString());
-                mainDataGrid.SelectedCells[0].Value = FunctionParser.Parse(textBox1.Text, mainDataGrid);
+                (mainDataGrid.SelectedCells[0] as SpreadsheetCell).Command = textBox1.Text;
             }
         }
 
@@ -136,6 +139,17 @@ namespace SpreadSheetCalculator
             {
                 ToCsV(mainDataGrid, sfd.FileName);
             }
+        }
+
+        private void mainDataGrid_SelectionChanged(object sender, EventArgs e)
+        {
+            textBox1.Text = (mainDataGrid.SelectedCells[0] as SpreadsheetCell).Command;
+        }
+
+        private void mainDataGrid_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            string cellValue = mainDataGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            (mainDataGrid.Rows[e.RowIndex].Cells[e.ColumnIndex] as SpreadsheetCell).Command = cellValue;
         }
     }
 }

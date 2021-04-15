@@ -11,119 +11,99 @@ namespace SpreadSheetCalculator
     static class FunctionParser
     {
         private static DataGridView dataGrid;
-        private static string[] functions = new string[] { "SUM", "AVG" };
-        private static object GetCellValue(int row, int col)
+        private static Dictionary<string, Function> functionsDict = new Dictionary<string, Function>()
         {
-            return dataGrid.Rows[row].Cells[col].Value;
-        }
-
-        private static double ExecuteFunction(string function, string[] args)
-        {
-            if (function == "SUM")
-            {
-                return ExecuteSum(args);
-            }
-            else if (function == "AVG")
-            {
-                return ExecuteAverage(args);
-            }
-            else
-                return Double.NaN;
-        }
-
-        private static double ExecuteSum(string[] args)
-        {
-            double[] values = ConvertArgsToDouble(args);
-            double sum = 0;
-            foreach (var value in values)
-                sum += value;
-            return sum;
-        }
-
-        private static double ExecuteAverage(string[] args)
-        {
-            double sum = ExecuteSum(args);
-            return sum / args.Length;
-        }
-
-        private static bool ArgIsFunction(string arg)
-        {
-            foreach (var function in functions)
-            {
-                if (arg.Contains(function))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+            { "SUM", new SumFunction() },
+            { "AVG", new AvgFunction() }
+        };
 
         private static bool ArgIsCell(string arg)
         {
-            // Check if arg contains letters
-            return Regex.IsMatch(arg, @"^[a-zA-Z]");
+            // Check if arg contains letters and doesn't contain a bracket
+            //return Regex.IsMatch(arg, @"^[a-zA-Z]") && !arg.Contains('(');
+            return Regex.IsMatch(arg, "^[a-zA-Z]+[0-9]+$");
         }
-        private static double[] ConvertArgsToDouble(string[] args)
-        {
-            double[] values = new double[args.Length];
-            for (int i = 0; i < args.Length; i++)
-            {
-                string arg = args[i];
-               
-                if (ArgIsFunction(arg))
-                    arg = Parse(arg, dataGrid).ToString();
 
-                if (ArgIsCell(arg))
-                {
-                    string letter = Regex.Match(arg, @"^[^0-9]*").Value;
-                    int col = CellIndexConverter.LetterToNumber(letter) - 1;
-                    int row = Convert.ToInt32(Regex.Match(arg, @"\d+").Value) - 1;
-                    values[i] = Convert.ToDouble(GetCellValue(row, col));
-                }
-                else
-                    values[i] = Convert.ToDouble(arg);
-                
-            }
-            return values;
+        private static bool ArgIsNumber(string arg)
+        {
+            return Regex.IsMatch(arg, @"^[0-9]*$");
+        }
+
+        private static SpreadsheetCell ConvertIndexToCell(string index)
+        {
+            string letter = Regex.Match(index, @"^[^0-9]*").Value;
+            int col = CellIndexConverter.LetterToNumber(letter) - 1;
+            int row = Convert.ToInt32(Regex.Match(index, @"\d+").Value) - 1;
+            return dataGrid.Rows[row].Cells[col] as SpreadsheetCell;
         }
         
-        public static double Parse(string text, DataGridView mainDataGrid)
+        public static object Parse(string text, DataGridView mainDataGrid)
         {
             dataGrid = mainDataGrid;
             try
             {
+                if (ArgIsCell(text))
+                {
+                    return ConvertIndexToCell(text).Value;
+                }
+                if (ArgIsNumber(text))
+                {
+                    return Convert.ToDouble(text);
+                }
+                if (text[0] != '=')
+                    return text;
+                text = text.Substring(1);
+                text.Trim();
+                
+
                 string function = text.Split('(')[0];
                 int openParenthesesIndex = text.IndexOf('(') + 1;
                 int closedParenthesesIndex = text.LastIndexOf(')');
 
                 // Split into args
-                bool insideAnotherFunction = false;
+                int insideAnotherFunction = 0;
                 List<string> argsList = new List<string>();
                 string currentArg = "";
                 foreach (char c in text.Substring(openParenthesesIndex, closedParenthesesIndex - openParenthesesIndex))
                 {
-                    if (c == ',' && !insideAnotherFunction)
+                    if (c == ',' && insideAnotherFunction == 0)
                     {
+                        currentArg = Parse(currentArg, dataGrid).ToString();
                         argsList.Add(currentArg);
                         currentArg = "";
                     }
                     else
-                       currentArg += c.ToString(); 
+                       currentArg += c.ToString();
 
                     if (c == '(')
-                        insideAnotherFunction = true;
+                        insideAnotherFunction++;
                     if (c == ')')
-                        insideAnotherFunction = false;
+                        insideAnotherFunction--;
                 }
+                currentArg = Parse(currentArg, dataGrid).ToString();
                 argsList.Add(currentArg);
                 string[] args = argsList.ToArray();
 
-                return ExecuteFunction(function, args);
+                return functionsDict[function].Execute(args);
             }
             catch
             {
-                return Double.NaN;
+                return null;
             }
+        }
+
+        public static List<SpreadsheetCell> extractDependencies(string text, DataGridView mainDataGrid)
+        {
+            var dependencies = new List<SpreadsheetCell>();
+            text = text.Replace(")", "");
+            string[] splitText = text.Split(new char[] { '(', ',' });
+            foreach (string arg in splitText)
+            {
+                if (ArgIsCell(arg))
+                    dependencies.Add(ConvertIndexToCell(arg));
+            }
+
+            return dependencies;
         }
     }
 }
