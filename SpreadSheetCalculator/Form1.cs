@@ -76,8 +76,8 @@ namespace SpreadSheetCalculator
                 CheckFileExists = true,
                 CheckPathExists = true,
 
-                DefaultExt = "xlsx",
-                Filter = "xlsx files (*.xlsx)|*.xlsx",
+                DefaultExt = "xls",
+                Filter = "xls files (*.xls)|*.xls",
                 FilterIndex = 2,
                 RestoreDirectory = true,
 
@@ -94,6 +94,7 @@ namespace SpreadSheetCalculator
         private void bt_load_Click(object sender, EventArgs e)
         {
             string PathConn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + tx_path.Text + ";Extended Properties = \"Excel 12.0 Xml;HDR=YES\"; ";
+            //string PathConn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + tx_path.Text + ";Extended Properties = \"Excel 12.0 Xml;HDR=YES\"; ";
             OleDbConnection conn = new OleDbConnection(PathConn);
             OleDbDataAdapter myDataAdapter = new OleDbDataAdapter("Select * from [" + tx_sheet.Text + "$]", conn);
             System.Data.DataTable dt = new System.Data.DataTable();
@@ -106,10 +107,6 @@ namespace SpreadSheetCalculator
         private void ToCsV(DataGridView dGV, string filename)
         {
             string stOutput = "";
-            string sHeaders = "";
-            for (int j = 0; j < dGV.Columns.Count; j++)
-                sHeaders = sHeaders.ToString() + Convert.ToString(dGV.Columns[j].HeaderText) + "\t";
-            stOutput += sHeaders + "\r\n";
             for (int i = 0; i < dGV.RowCount - 1; i++)
             {
                 string stLine = "";
@@ -131,7 +128,7 @@ namespace SpreadSheetCalculator
         {
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "Excel Documents (*.xls)|*.xls";
-            sfd.FileName = "export.xlss";
+            sfd.FileName = "export.xls";
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 ToCsV(mainDataGrid, sfd.FileName);
