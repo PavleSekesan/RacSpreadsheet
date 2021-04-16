@@ -148,7 +148,7 @@ namespace SpreadSheetCalculator
 
         private void mainDataGrid_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            string cellValue = mainDataGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            string cellValue = Convert.ToString(mainDataGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
             (mainDataGrid.Rows[e.RowIndex].Cells[e.ColumnIndex] as SpreadsheetCell).Command = cellValue;
         }
     }

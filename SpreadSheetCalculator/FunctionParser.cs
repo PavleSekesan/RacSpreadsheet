@@ -17,6 +17,19 @@ namespace SpreadSheetCalculator
             { "AVG", new AvgFunction() }
         };
 
+        private static bool ArgIsGroupOfCells(string arg)
+        {
+            string[] cells = arg.Split(':');
+            try
+            {
+                return ArgIsCell(cells[0]) && ArgIsCell(cells[1]);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private static bool ArgIsCell(string arg)
         {
             // Check if arg contains letters and doesn't contain a bracket
@@ -26,7 +39,7 @@ namespace SpreadSheetCalculator
 
         private static bool ArgIsNumber(string arg)
         {
-            return Regex.IsMatch(arg, @"^[0-9]*$");
+            return Regex.IsMatch(arg, @"^[0-9]+$");
         }
 
         private static SpreadsheetCell ConvertIndexToCell(string index)
@@ -36,12 +49,51 @@ namespace SpreadSheetCalculator
             int row = Convert.ToInt32(Regex.Match(index, @"\d+").Value) - 1;
             return dataGrid.Rows[row].Cells[col] as SpreadsheetCell;
         }
+
+        private static string UnravelGroupOfCells(string text)
+        {
+            var groups = Regex.Matches(text, @"[a-zA-Z]+[0-9]+[:][a-zA-Z]+[0-9]+");
+            foreach (Match group in groups)
+            {
+                string groupStr = group.Value;
+                string replacement = "";
+                // ISUSE SREDI OVO
+                ///////////////////
+                string[] cells = groupStr.Split(':');
+                string cell1 = cells[0];
+                string cell2 = cells[1];
+                int col1 = CellIndexConverter.LetterToNumber(Regex.Match(cell1, @"^[^0-9]*").Value) - 1;
+                int row1 = Convert.ToInt32(Regex.Match(cell1, @"\d+").Value);
+                int col2 = CellIndexConverter.LetterToNumber(Regex.Match(cell2, @"^[^0-9]*").Value) - 1;
+                int row2 = Convert.ToInt32(Regex.Match(cell2, @"\d+").Value);
+                if (row1 == row2)
+                {
+                    for (int i = col1; i <= col2; i++)
+                    {
+                        replacement += CellIndexConverter.NumberToLetter(i) + Convert.ToString(row1) + ",";
+                    }
+                }
+                else if (col1 == col2)
+                {
+                    for (int i = row1; i <= row2; i++)
+                    {
+                        replacement += CellIndexConverter.NumberToLetter(col1) + Convert.ToString(i) + ",";
+                    }
+                }
+                text = text.Replace(groupStr, replacement);
+                ///////////////////
+            }
+            return text;
+        }
         
         public static object Parse(string text, DataGridView mainDataGrid)
         {
             dataGrid = mainDataGrid;
+            text = UnravelGroupOfCells(text);
             try
             {
+                if (text == "")
+                    return text;
                 if (ArgIsCell(text))
                 {
                     return ConvertIndexToCell(text).Value;
@@ -95,6 +147,7 @@ namespace SpreadSheetCalculator
         public static List<SpreadsheetCell> extractDependencies(string text, DataGridView mainDataGrid)
         {
             var dependencies = new List<SpreadsheetCell>();
+            text = UnravelGroupOfCells(text);
             text = text.Replace(")", "");
             string[] splitText = text.Split(new char[] { '(', ',' });
             foreach (string arg in splitText)
