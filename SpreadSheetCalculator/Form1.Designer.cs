@@ -52,6 +52,8 @@ namespace SpreadSheetCalculator
             this.mainDataGrid.Name = "mainDataGrid";
             this.mainDataGrid.Size = new System.Drawing.Size(797, 324);
             this.mainDataGrid.TabIndex = 0;
+            this.mainDataGrid.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.mainDataGrid_CellEndEdit);
+            this.mainDataGrid.SelectionChanged += new System.EventHandler(this.mainDataGrid_SelectionChanged);
             // 
             // textBox1
             // 
