@@ -1,4 +1,3 @@
-C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.csprojAssemblyReference.cache
 C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.Form1.resources
 C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.Properties.Resources.resources
 C:\Users\Pavle\source\repos\RacSpreadsheet\SpreadSheetCalculator\obj\Debug\SpreadSheetCalculator.csproj.GenerateResource.cache

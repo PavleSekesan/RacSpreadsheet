@@ -53,7 +53,7 @@ namespace SpreadSheetCalculator
         private static string UnravelGroupOfCells(string text)
         {
             var groups = Regex.Matches(text, @"[a-zA-Z]+[0-9]+[:][a-zA-Z]+[0-9]+");
-            foreach (Match group in groups)
+            foreach(Match group in groups)
             {
                 string groupStr = group.Value;
                 string replacement = "";
@@ -80,6 +80,7 @@ namespace SpreadSheetCalculator
                         replacement += CellIndexConverter.NumberToLetter(col1) + Convert.ToString(i) + ",";
                     }
                 }
+                replacement = replacement.TrimEnd(',');
                 text = text.Replace(groupStr, replacement);
                 ///////////////////
             }
