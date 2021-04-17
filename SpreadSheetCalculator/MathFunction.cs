@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SpreadSheetCalculator
@@ -10,12 +11,15 @@ namespace SpreadSheetCalculator
     {
         protected double[] ConvertArgsToDouble(string[] args)
         {
-            double[] newArgs = new double[args.Length];
+            List<double> newArgs = new List<double>();
             for (int i = 0; i < args.Length; i++)
             {
-                newArgs[i] = Convert.ToDouble(args[i]);
+                if (Regex.IsMatch(args[i], @"^[0-9]+$"))
+                {
+                    newArgs.Add(Convert.ToDouble(args[i]));
+                }
             }
-            return newArgs;
+            return newArgs.ToArray();
         }
     }
 }
