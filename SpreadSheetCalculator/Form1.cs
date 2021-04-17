@@ -94,7 +94,6 @@ namespace SpreadSheetCalculator
         private void bt_load_Click(object sender, EventArgs e)
         {
             string PathConn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + tx_path.Text + ";Extended Properties = \"Excel 12.0 Xml;HDR=YES\"; ";
-            //string PathConn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + tx_path.Text + ";Extended Properties = \"Excel 12.0 Xml;HDR=YES\"; ";
             OleDbConnection conn = new OleDbConnection(PathConn);
             OleDbDataAdapter myDataAdapter = new OleDbDataAdapter("Select * from [" + tx_sheet.Text + "$]", conn);
             System.Data.DataTable dt = new System.Data.DataTable();
@@ -127,8 +126,8 @@ namespace SpreadSheetCalculator
         private void bt_export_Click(object sender, EventArgs e)
         {
             SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "Excel Documents (*.xls)|*.xls";
-            sfd.FileName = "export.xls";
+            sfd.Filter = "Excel Documents (*.xlsx)|*.xlsx";
+            sfd.FileName = "export.xlsx";
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 ToCsV(mainDataGrid, sfd.FileName);
